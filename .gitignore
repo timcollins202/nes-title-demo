@@ -1,0 +1,10 @@
+
+*.o
+
+*.dbg
+
+title-demo.map.txt
+
+title-demo.labels.txt
+
+*.nes
