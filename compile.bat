@@ -8,7 +8,7 @@
 @del title-demo.nes.dbg
 @echo.
 @echo Compiling...
-\cc65\bin\ca65 title-demo.s -g -o title-demo.o
+\cc65\bin\ca65 title-demo.asm -g -o title-demo.o
 @IF ERRORLEVEL 1 GOTO failure
 @echo.
 @echo Linking...
