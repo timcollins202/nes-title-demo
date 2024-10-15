@@ -40,6 +40,7 @@ INES_SRAM   = 0 ; 1 = battery backed SRAM at $6000-7FFF
 .segment "ZEROPAGE"
     time:               .res 2  ;time tick counter
     lasttime:           .res 1  ;what time was last time it was checked
+    paddr:              .res 2  ;16-bit address pointer
     ;put all them variables here
 
 .segment "OAM"
@@ -199,6 +200,8 @@ paletteloop:
     CPX #32
     BCC paletteloop
 
+    JSR draw_stars
+
 mainloop:
     LDA time
     CMP lasttime        ;make sure time has actually changed
@@ -206,17 +209,39 @@ mainloop:
     STA lasttime        ;time has changed, so update lasttime
 
     ;loop calls go here
-    JSR player_actions
+    ;JSR player_actions
+    
 
     JMP mainloop
 .endproc
 
 
 ;*****************************************************************
-; Display Title Screen
+; Draw star sprites to screen
 ;*****************************************************************
 .segment "CODE"
+.proc draw_stars
+    ;set initial values for sprite
+initialize_sprite:
+    LDA #255
+    STA oam         ;sprite 1 Y pos
+    LDA #$01
+    STA oam + 1     ;sprite 1 tile
+    LDA #0          ;no attributes
+    STA oam + 2     ;sprite 1 attr
+    LDA #1
+    STA oam + 3     ;sprite 1 X pos
 
+    ;check whether we are still on screen and if so,
+    ;adjust X and Y positions to move it diagonally across screen
+    LDA oam
+    CMP #1
+    BEQ initialize_sprite
+    DEC oam
+    INC oam + 3
+
+
+.endproc
 
 
 ;*****************************************************************
